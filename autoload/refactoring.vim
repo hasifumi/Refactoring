@@ -30,7 +30,7 @@ function! refactoring#renameLocalVariable()
 
   " Find the start and end of the current block
   " TODO: tidy up if no matching 'def' found (start would be 0 atm)
-  let [block_start, block_end] = common#get_range_for_block('-\>','Wb')
+  let [block_start, block_end] = common#get_range_for_block('->','Wb')
 
   " Rename the variable within the range of the block
   call common#gsub_all_in_range(block_start, block_end, '[^@]\<\zs'.selection.'\>\ze\([^\(]\|$\)', name)

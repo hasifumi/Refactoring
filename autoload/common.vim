@@ -49,11 +49,15 @@ function! common#get_range_for_block(pattern_start, flags)
   "let block_end = line(".")
   "-- to --
 
+  "echo "block_start line:". block_start
+  "echo "block_start indent level:". indent(block_start)
+  let lvl = indent(block_start)
   let block_end = block_start
-  let lvl = indent(line(block_end))
   while block_end <= line("$")
     let block_end = block_end + 1
-    if lvl >=  indent(block_end)
+    if lvl >= indent(block_end)
+      let block_end = block_end - 1
+      "echo "block_end line:". block_end
       break
     endif
   endwhile
