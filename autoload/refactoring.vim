@@ -36,3 +36,23 @@ function! refactoring#renameLocalVariable()
   call common#gsub_all_in_range(block_start, block_end, '[^@]\<\zs'.selection.'\>\ze\([^\(]\|$\)', name)
 endfunction
 
+function! refactoring#inlineTemp()
+  let original_a = @a
+  normal "ayiw
+  echo "1st(@a):".@a
+  normal 4diw
+  let original_b = @b
+  normal "bd$
+  echo "2nd(@b):".@a
+  normal dd
+
+  let current_line = line(".")
+
+  let [block_start, block_end] = common#get_range_for_block('->','Wb')
+
+  call common#gsub_all_in_range(current_line, block_end, @a, @b)
+
+  let @a = original_a
+  let @b = original_b
+
+endfunction

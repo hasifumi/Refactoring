@@ -1,5 +1,8 @@
 
  ->
+   ccc
+
+ ->
    aaa
    bbb ccc
    ccc
@@ -10,4 +13,8 @@
  ccc
 
 ccc
+
+ ->
+   111 = test1(aaa)
+   333 = 111
 
