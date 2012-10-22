@@ -56,3 +56,22 @@ function! refactoring#inlineTemp()
   let @b = original_b
 
 endfunction
+
+function! refactoring#extractConstant()
+  "normal NeoComplCacheDisable
+  try
+    let name = toupper(common#get_input("Constant name:", "No constant name given!"))
+  catch
+    echo v:exception
+    "normal NeoComplCacheEnable
+    return
+  endtry
+
+  normal! gv
+  exec "normal c" . name
+  exec "?^class"
+  exec "normal! o" . "  " . name . " = "
+  normal! $p
+  "normal NeoComplCacheEnable
+
+endfunction

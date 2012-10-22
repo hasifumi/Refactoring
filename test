@@ -18,3 +18,12 @@ ccc
    111 = test1(aaa)
    333 = 111
 
+class AAA
+  constructor:(w, h)->
+    @width = w
+    @height = h
+    temp = 1.05
+  test:->
+    temp2 = 3.14
+    temp3 = 1.05
+
