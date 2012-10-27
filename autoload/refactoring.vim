@@ -43,7 +43,7 @@ function! refactoring#inlineTemp()
   normal 4diw
   let original_b = @b
   normal "bd$
-  echo "2nd(@b):".@a
+  echo "2nd(@b):".@b
   normal dd
 
   let current_line = line(".")
@@ -58,21 +58,19 @@ function! refactoring#inlineTemp()
 endfunction
 
 function! refactoring#extractConstant()
-  "normal NeoComplCacheDisable
   try
     let name = toupper(common#get_input("Constant name:", "No constant name given!"))
   catch
     echo v:exception
-    "normal NeoComplCacheEnable
     return
   endtry
 
-  normal! gv
-  exec "normal c" . name
-  exec "?^class"
-  exec "normal! o" . "  " . name . " = "
-  normal! $p
-  "normal NeoComplCacheEnable
+  let target = expand("<cWORD>")
+  let insert_text = "  " . name . " = " . target
+  let current_line = line(".")
+  let [block_start, block_end] = common#get_range_for_block('^class','Wb')
+  call common#gsub_all_in_range(current_line, block_end, target, "@". name)
+  let ret = append(block_start, insert_text)
 
 endfunction
 

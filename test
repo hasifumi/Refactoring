@@ -26,10 +26,17 @@ class AAA
   test:->
     temp2 = 3.14
     temp3 = 1.05
+    temp4 = 1.05467
   test2:->
     a = test3(bb)
     a.AAA = 1.05
     b = trans(a)
     return b
+
+class BBB
+  constructor:(w, h)->
+   @name = w
+  test1:->
+    temp = 1.05
 
 

@@ -74,7 +74,7 @@ function! common#gsub_all_in_range(start_line, end_line, pattern, replace)
   let lnum = a:start_line
   while lnum <= a:end_line
     let oldline = getline(lnum)
-    let newline = substitute(oldline,a:pattern,a:replace,'g')
+    let newline = substitute(oldline,a:pattern,a:replace, 'g')
     call setline(lnum, newline)
     let lnum = lnum + 1
   endwhile
