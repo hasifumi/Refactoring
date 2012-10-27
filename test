@@ -26,4 +26,10 @@ class AAA
   test:->
     temp2 = 3.14
     temp3 = 1.05
+  test2:->
+    a = test3(bb)
+    a.AAA = 1.05
+    b = trans(a)
+    return b
+
 

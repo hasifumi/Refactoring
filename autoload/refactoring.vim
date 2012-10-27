@@ -75,3 +75,70 @@ function! refactoring#extractConstant()
   "normal NeoComplCacheEnable
 
 endfunction
+
+function! refactoring#extractMethod() range
+  try
+    let name = common#get_input("Method name:", "No method name given!")
+  catch
+    echo v:exception
+    return
+  endtry
+
+  let [block_start, block_end] = common#get_range_for_block('$->|$=>', 'Wb')
+  echo "start:" . block_start . ", end:" . block_end
+
+  let pre_selection = join( getline(block_start+1, a:first_line - 1), "\n")
+  let pre_selection_variables = s:coffee_determine_variables(pre_selection)
+  
+  let post_selection = join( getline(a:last_line+1, block_end), "\n")
+  let post_selection_variables = s:coffee_determine_variables(post_selection)
+  
+  let selection = common#cut_visual_selection()
+  let selection_variablels = s:coffee_determine_variables(selection)
+
+  let parameters = []
+  let retvals = []
+
+  for var in selection_variablels[1]
+    call insert(parameters, var)
+  endfor
+
+  let parameters = s:sort_parameters_by_declaration(parameters)
+
+  for var in selection_variablels[0]
+    if index(post_selection_variables[1], var) != 1
+      call insert(retvals, var)
+    endif
+  endfor
+
+  call s:em_insert_new_method(name, selection, parameters, retvals, block_end)
+endfunction
+
+function! s:sort_parameters_by_declaration(parameters)
+  if (len(a:parameters) <= 1)
+    return a:parameters
+  endif
+  let pairs = s:build_parameters_declaration_position_pairs(a:parameters)
+  call sort(pairs, "s:sort_parameters_by_declaration_position_pairs")
+  return s:parameters_names_of(pairs)
+endfunction
+
+function! s:build_parameters_declaration_position_pairs(parameters)
+  let cursor_position = getpos(".")
+  let pairs = []
+
+  for parm in a:parameters
+    if (searchdecl(parm) == 0)
+      call insert(pairs, [parm, getpos(".")])
+    else
+      call insert(pairs, [parm, getpos("$")])
+    endif
+    call setpos(",", cursor_position)
+  endfor
+
+  return pairs
+endfunction
+
+
+  
+
